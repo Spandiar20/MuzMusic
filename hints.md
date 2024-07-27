@@ -162,3 +162,27 @@ class Profile(models.Model):
 now i dont really know what should the author field in the Post model , refer to!
 User or Profile? Imma refer it the Profile
 
+
+
+
+# Mordad 7th 1:00 am
+so im dealing with forms, I  started the SignUpForm and it has challenges for me both in the views and forms , 
+in the forms i had to deciede which fields to show to the user , i wanted to get rid of the username and use email and password for authentication but because of inherting from userCreateionForm i didnt dear! 
+The other challenge was capitalizing the first_name and last_name before being saved to the data base 
+
+```python
+    if form.is_valid():
+            user=form.save(commit=False)
+            user.first_name=form['first_name'].value().capitalize()
+            user.last_name=form['last_name'].value().capitalize()
+            user.save()
+```
+In Django, a "BoundField" is a field object associated with a form that has been bound to some data, usually coming from user input or initial form data. It is a subclass of Django's Field class, which represents a single input field on a form.
+When you create a form instance with some data, each field in the form gets populated with the corresponding data value and becomes a "BoundField". This allows you to interact with the field knowing that it has a specific value.
+For example, when you write form = MyForm(request.POST), each field in MyForm is bound to the corresponding value from the request.POST dictionary, creating a set of BoundField instances.
+Some common attributes and methods you can use with BoundField instances include:
+.value: Returns the current value of the field as a string.
+.data: Returns the data used to populate the field.
+.errors: Returns an ErrorList object that contains any validation errors associated with the field.
+.as_widget(): Renders the field as an HTML widget.
+Working with BoundField instances is an essential part of handling form data in Django views and templates.

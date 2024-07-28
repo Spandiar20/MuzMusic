@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 
@@ -15,19 +16,22 @@ class Category(models.Model):
 class Post(models.Model):
     title= models.CharField(max_length=100)
     content=models.TextField()
-    category=models.ForeignKey(Category,on_delete=models.CASCADE)
+    category=models.ManyToManyField(Category)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
     image_file=models.ImageField(upload_to='post_image_files')
-    audio_file = models.FileField(upload_to='post_audio_files')
+    audio_file = models.FileField(upload_to='post_audio_files',null=True,blank=True)
     counted_views = models.IntegerField(default=1)
     post_author=models.ForeignKey(User,on_delete=models.CASCADE)
-    likes=models.ManyToManyField(User,related_name='post_likes')
+    likes=models.ManyToManyField(User,related_name='post_likes',null=True,blank=True)
 
+    def get_absolute_url(self):
+       return reverse('blog:single_view',kwargs={'pk':self.id})
 
+    # This is new!
     def clean(self):
         if (not self.image_file and not self.audio_file and not self.content):
-            raise ValidationError("Either field1 or field2 must have a value.")
+            raise ValidationError("Either content or image of audio must have a value.")
 
         super().clean()
 

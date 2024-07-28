@@ -1,0 +1,15 @@
+{% load static %}
+<div class="single-sidebar-widget user-info-widget">
+    <img style="border-radius:  50%;" src="{{profile.profile_image.url}}" alt="">
+    <a href="#"><h4>{{profile.user}}</h4></a>
+    
+    <ul class="social-links">
+        <li><a href="{{profile.telegram_id}}"><i class="fa fa-telegram"></i></a></li>
+        <li><a href="{{profile.linkedin_id_id}}"><i class="fa fa-linkedin"></i></a></li>
+        <!-- <li><a href="#"><i class="fa fa-github"></i></a></li> -->
+        <li><a href="{{profile.instagram_id}}"><i class="fa fa-instagram"></i></a></li>
+    </ul>
+    <p>
+        {{profile.bio}}
+    </p>
+</div>

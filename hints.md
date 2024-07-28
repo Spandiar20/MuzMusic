@@ -186,3 +186,163 @@ Some common attributes and methods you can use with BoundField instances include
 .errors: Returns an ErrorList object that contains any validation errors associated with the field.
 .as_widget(): Renders the field as an HTML widget.
 Working with BoundField instances is an essential part of handling form data in Django views and templates.
+
+
+
+# Mordad 7th 10:00 am
+i had problem fetching the categories related to a post, i didnt  know how to do it in a ManyToMany relateionship. I didnt know how to do it in a OneToMany realationship too!
+```html
+
+<ul class="tags">
+    {% for cat in post.category.all %}
+    <li><a href="#">
+        {{cat.title}}
+        {% if not forloop.last %}
+        ,
+        {% endif %}	
+    </a></li>
+    {% endfor %}
+</ul>
+```
+
+
+
+
+
+# Mordad 7th 11:00 am
+**media and static files config**
+```python
+
+#settings
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+#urls
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#this line solved the problem
+# This line serves media files from the MEDIA_ROOT directory using the static function from django.conf.urls.static module. This approach is suitable for local development but is not recommended for production, as it is not designed to handle the performance demands and security requirements of a live site.
+```
+I had trouble showing the image i had uploaded adn the above line solved the problem
+the folders post_image_files and post_audio_files were automatcally created . These folders were defined when creating the fields in the models
+
+
+
+**The problem is that we dont have a media folder**
+MEDIA_ROOT = BASE_DIR / 'media'
+this line is in charge of creating the media folder
+and the upload_to attrs in the models creates subfolders in the media!
+
+Done!
+
+
+# Dealing with redirecting the user to the single page
+i learned something new 
+i am now using th get_absolute_url method in models to this and its a lot cleaner than the other ways 
+```html
+		<a class="posts-title" href="{{post.get_absolute_url}}"><h3>{{post.title}}</h3></a>
+```
+
+
+============================================================================================
+# Mordad 7th 1:00 pm
+Dealing with single pages . I have an issue with having the audio_file form the post model in the template. Couldn't solve it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+============================================================================================
+
+
+============================================================================================
+# Mordad 7th 2:00 pm
+i seperatd the sidebar widgets into some other files and included them in the blog-single.html , Now i dont know to use teplate tags or views to send data to them
+
+Imma use custom template tags 
+============================================================================================
+
+so i used custom template tags !!!!!!!
+i use custom template tags for popular_posts, category counts, the author widget.
+
+
+
+
+
+
+# Mordad 7th 4:00 pm
+**Custom Template Tags**
+one thing to note! Watch out not to choose the same name if you have custom tags in more than one app
+
+
+**Now is the time to implement the ability to search posts**
+its done , but i had trouble doing in CBV
+```python 
+
+class BlogView(ListView):
+    model=Post
+    template_name='blog/blog-home.html'
+    context_object_name='posts'
+
+
+    query=self.request.GET.get('search')
+    def get_queryset(self):
+        #query=self.request.GET.get('search')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(post_author__username__icontains=query)
+            )
+        else:
+            return Post.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #query = self.request.GET.get('search')
+        if query and not context['posts']:
+            context['no_results_message'] = f"No results found for '{query}'."
+        return context   
+
+#overall i feel like i should use get_context_data when manipulating data and adding something else rather than the model to be passed to the template
+```
+
+
+# Mordad 7th 5:40 pm
+**writer_widget custom tag**
+- the thing about the writer-info is that it takes an arg which defienes which user's info is going to be shown based on the page we are.
+So this arg should be differnt based on the page
+
+
+
+# Mordad 7th 10:20 pm
+I want to make the counted_views of every post to increment whenever someone the sigle page of the post, so we should modify the BlogSingle class
+```python 
+
+   def get_context_data(self,**kwargs):
+        context= super().get_context_data(**kwargs)
+        Post.objects.filter(id=self.kwargs.get('pk')).update(counted_views=F('counted_views') + 1)
+        # if you use get instead of filter you are encountring an error! = > AttributeError at /blog/single-view/1
+        # 'Post' object has no attribute 'update'
+
+        # this was a solution!
+        # post=Post.objects.get(id=self.kwargs.get('pk'))
+        # post.counted_views +=1
+        # post.save()
+        return context  
+
+```
+
+**what is F**
+In Django's ORM, F is an object that represents a model field reference. It is used to perform database operations using the values of fields directly in the database without having to load them into memory first
+```python
+books_with_review_count = Book.objects.annotate(review_count=Sum(('bookreview__count'))) 
+books_with_review_count = Book.objects.annotate(review_count=Sum(F('bookreview__count'))) 
+
+```
+how are these querier different? 
+The first query you provided is slightly incorrect, as you're missing the F object. The correct query should be:
+python
+Copy
+books_with_review_count = Book.objects.annotate(review_count=Sum(F('bookreview__count')))
+In this corrected query, the F('bookreview__count') part is essential for it to work properly. The F object allows Django to reference the count field of the BookReview model related to each Book instance. The Sum() function then aggregates those values for each Book.
+If you omit the F object and just pass 'bookreview__count' as a string:
+python
+Copy
+books_with_review_count = Book.objects.annotate(review_count=Sum('bookreview__count'))
+Django would try to sum up the string 'bookreview__count' rather than the actual values from the related BookReview instances. As a result, the query would produce incorrect results, with each Book instance having the same review_count.
+In summary, using the F object ensures that Django correctly interprets the expression and computes the aggregated values based on the actual field values from the related model instances.

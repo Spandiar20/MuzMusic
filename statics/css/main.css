@@ -880,6 +880,14 @@ td, th {
   border-top: 1px dotted #eee;
 }
 
+
+.section-top-border .row .col-md-3 img{
+  height: 160px;
+  width: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .switch-wrap {
   margin-bottom: 10px;
 }
@@ -2230,6 +2238,17 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: none;
 }
 
+.my_div{
+  width: 0%;
+}
+.my_div a { 
+  color:white;
+  padding-right: 510px;
+  
+}
+
+
+
 .nav-menu ul li:hover > a {
   color: #f8b600;
 }
@@ -2373,6 +2392,13 @@ body.mobile-nav-active #mobile-nav-toggle {
   padding-left: 15px;
 }
 
+#logo img{
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 #nav-menu-container {
   padding-right: 15px;
 }
@@ -2483,12 +2509,12 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 /*-------- Start Banner Area ------------*/
 .banner-area {
-  background: url(../img/hero-bg.jpg) center;
+  background: url(../images/blog_background.jpg) center;
   background-size: cover;
 }
 
 .banner-area .overlay-bg {
-  background: rgba(4, 9, 30, 0.4);
+  background: rgba(0, 1, 3, 0.4);
 }
 
 @media (max-width: 767px) {
@@ -2632,7 +2658,9 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .single-destination .thumb img {
-  width: 100%;
+  width:400px ;
+  height: 240px;
+  object-fit: cover;
 }
 
 .single-destination .desc {
@@ -3006,7 +3034,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .about-banner {
-  background: url(../img/top-banner.jpg) center;
+  background: url(../images/blog_background.jpg) center;
   background-size: cover;
 }
 
@@ -3244,7 +3272,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .list-wrap ul {
-  list-style-image: url("../img/insurence/bullet.png");
+  list-style-image: url(../images/insurence/bullet.png);
 }
 
 .list-wrap li {
@@ -3266,9 +3294,10 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* =================================== */
 /*============ Start Blog Home Styles  =============*/
 .blog-home-banner {
-  background: url(../img/blog/blog-home-banner.jpg) bottom;
+  background: url(../images/blog_background.jpg) bottom;
   background-size: cover;
-  padding: 130px 0px;
+  padding-bottom: 130px ;
+  padding-top: 130px;
 }
 
 .blog-home-banner .primary-btn {
@@ -3332,7 +3361,9 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .top-category-widget-area .single-cat-widget img {
-  width: 100%;
+  width: 300px;
+  height: 220px;
+  object-fit: cover;
 }
 
 .top-category-widget-area .single-cat-widget .content-details {
@@ -3629,6 +3660,14 @@ body.mobile-nav-active #mobile-nav-toggle {
   margin-bottom: 10px;
 }
 
+.widget-wrap .user-info-widget img{
+ height: 125px;
+ width:125px;
+ border-radius: 50%;
+ object-fit: cover;
+ 
+}
+
 .widget-wrap .user-info-widget .social-links li a {
   color: #222;
   padding: 10px;
@@ -3655,8 +3694,40 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .widget-wrap .popular-post-widget .popular-post-list .thumb img {
-  width: 100%;
+  width: 180px;
+  height: 95px;
+  object-fit: cover;
 }
+
+
+
+.my-comment-card .gradient-custom {
+  width: 905px;
+
+
+}
+
+.my-comment-card h4 {
+  background: #f8b600;
+  color: #fff;
+  text-align: center;
+  padding: 12px 0px;
+  width: 58%;
+  margin-left: 110px;
+}
+
+.reply-button {
+  margin-left: 230px;
+}
+.reply-button button {
+  color:white
+}
+
+.my-comment-card .gradient-custom img{
+  margin-right: 12px;
+
+}
+
 
 .widget-wrap .popular-post-widget .single-post-list {
   margin-bottom: 20px;

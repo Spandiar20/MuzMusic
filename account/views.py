@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import SignUpForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
@@ -20,6 +20,7 @@ def register_user(request):
             user=authenticate(username=username,password=password)
             login(request,user)
             messages.success(request,(f'Welcome to MuzMusic dear {first_name}'))
+            redirect('')
     return render(request,'account/register.html',{
         'form':form
     })

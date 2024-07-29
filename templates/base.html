@@ -40,21 +40,20 @@
 						{% if request.user.is_authenticated %}
                           <ul>
                               <li><a href="#">Logged in as {{request.user.username}}</a></li>
-                              <li><a href="#">Logout</a></li>
+                              <li><a href="{% url 'account:logout' %}">Logout</a></li>
                           </ul>		
 						  {% else %}	
 						  <ul>
-							<li><a href="#">Login</a></li>
-							<li><a href="#">Register</a></li>
+							<li><a href="{% url 'account:login' %}">Login</a></li>
+							<li><a href="{% url 'account:register' %}">Register</a></li>
 						</ul>		
 						  {% endif %}
                       </div>
                       <div class="col-lg-6 col-sm-6 col-6 header-top-right">
                         <div class="header-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-dribbble"></i></a>
-                            <a href="#"><i class="fa fa-behance"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-telegram"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
                       </div>
                   </div>			  					
@@ -63,13 +62,18 @@
             <div class="container main-menu">
                 <div class="row align-items-center justify-content-between d-flex">
                   <div id="logo">
-                    <a href="index.html"><img src="{% static 'images/logo.png' %}" alt="" title="" /></a>
-                  </div>
+					{% if request.user.is_authenticated %}
+                    <a href="index.html"><img src="{{request.user.profile.profile_image.url}}" alt="" title="" /></a>
+					{% else %}
+					<a href="index.html"><img src="{% static 'images/default_profile.png' %}" alt="" title="" /></a>
+					{% endif %}
+				</div>
                   <nav id="nav-menu-container">
+					
                     <ul class="nav-menu">
                       <li><a href="{% url 'website:index' %}">Home</a></li>
                       <li><a href="{% url 'website:about' %}">About</a></li>
-                      <li class="menu-has-children"><a href="{% url 'blog:blog_view' %}">Blog</a>
+                      <li class="menu-has-children"><a href="{% url 'blog:blog_home' %}">Blog</a>
                         
                       </li>	
                       <li class="menu-has-children"><a href="">Pages</a>
@@ -80,6 +84,7 @@
                   </nav><!-- #nav-menu-container -->					      		  
                 </div>
             </div>
+			
         </header><!-- #header -->
         {% block content %}
 

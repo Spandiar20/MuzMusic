@@ -1,7 +1,6 @@
 {% extends 'account/account_base.html' %}
 {% load static %}
 
-
 {% block content %}
 <body style="background-color: #999999;">
 	<div class="limiter">
@@ -10,14 +9,14 @@
 			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
 
 
-				<form action="{% url 'account:register' %}" method="post" class="login100-form validate-form">
+				<form action="{% url 'account:edit_profile' %}" method="post" enctype="multipart/form-data" class="login100-form validate-form">
 					{% csrf_token %}
 
 
 					<span class="login100-form-title p-b-59">
-						Sign Up
+						Update Profile
 					</span>
-					<!-- 
+					<!--
 					<div class="wrap-input100 validate-input" >
 						<span class="label-input100">First Name</span>
 							{{form.first_name}}
@@ -38,40 +37,48 @@
 						-->
 						<div class="wrap-input100 validate-input" >
 							<span class="label-input100">First Name</span>
-								{{form.first_name}}
+								{{user_form.first_name}}
 							<span class="focus-input100"></span>
 							</div>
 
 
 							<div class="wrap-input100 validate-input" >
 								<span class="label-input100">Last Name</span>
-									{{form.last_name}}
+									{{user_form.last_name}}
 								<span class="focus-input100"></span>
 								</div>
 				
 
 					<div class="wrap-input100 validate-input" data-validate="Username is required">
 						<span class="label-input100">Username</span>
-						{{form.username}}
+						{{user_form.username}}
 						<span class="focus-input100"></span>
 					</div>
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<span class="label-input100">Password</span>
-						{{form.password1}}
-						<span class="focus-input100"></span>
-					</div>
-					<div class="wrap-input100 validate-input" data-validate="Repeat Password is required">
-						<span class="label-input100">Repeat Password</span>
-						{{form.password2}}
-						<span class="focus-input100"></span>
-					</div>
+			
+				
 
 
 					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
 						<span class="label-input100">Email</span>
-						{{form.email}}
+						{{user_form.email}}
 						<span class="focus-input100"></span>
 					</div>
+
+
+					
+					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+						<span class="label-input100">Bio</span>
+						{{profile_form.bio}}
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+						<span class="label-input100">Profile Image</span>
+						{{profile_form.profile_image}}
+						<span class="focus-input100"></span>
+					</div>
+
+
 
 
 
@@ -81,13 +88,9 @@
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
 							<button type="submit" class="login100-form-btn">
-								Sign Up
+								Update Profile
 							</button>
 						</div>
-						<a href="{% url 'account:login' %}" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
-							Login
-							<i class="fa fa-long-arrow-right m-l-5"></i>
-						</a>
 						<div class="alert alert-light" role="alert">
 							{% if messages %}
 							<ul class="messages">

@@ -94,7 +94,7 @@
 								<div class="col-lg-3  col-md-3 meta-details">
 									<ul class="tags">
 										{% for cat in post.category.all %}
-										<li><a href="#">
+										<li><a href="{% url 'blog:blog_category' cat_name=post.category %}">
 											{{cat.title}}
 											{% if not forloop.last %}
 											,
@@ -200,7 +200,9 @@
 			                            <button type="submit"><i class="fa fa-search"></i></button>
 			                        </form>
 								</div>
-								{% writer_widget request.user.id %}
+								{% if request.user.is_authenticated %}
+									{% writer_widget request.user.id %}
+								{% endif %}	
 								{% popular_posts %}
 								{% include 'blog/ads.html' %}
 								{% post_category %}

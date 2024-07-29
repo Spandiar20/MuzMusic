@@ -346,3 +346,201 @@ Copy
 books_with_review_count = Book.objects.annotate(review_count=Sum('bookreview__count'))
 Django would try to sum up the string 'bookreview__count' rather than the actual values from the related BookReview instances. As a result, the query would produce incorrect results, with each Book instance having the same review_count.
 In summary, using the F object ensures that Django correctly interprets the expression and computes the aggregated values based on the actual field values from the related model instances.
+
+
+
+
+
+# Mordad 8th 11:00 pm
+**Dealing with messages**
+```html
+
+<h6 class="text-white">	
+    {% if messages %}
+    <div class="alert alert-dark" role="alert">
+        {% for s in messages %}
+            {{s}}
+        {% endfor %}
+        </div>
+        {% endif %}	
+</h6>
+
+```
+```python 
+# dont forget to import mark_safe to escape the html tags
+    user=authenticate(username=username,password=password)
+    login(request,user)
+    messages.success(request,(f'Welcome to MuzMusic dear {first_name}'))
+    return redirect('website:index')
+else:
+        for field, errors in form.errors.items():
+        messages.add_message(request, messages.ERROR,mark_safe( f"Field {field} has the following errors: {errors}"))
+
+
+```
+
+
+# Mordad 8th 11:30 pm
+
+**Login form**
+Im not  going to define a form , im going to use input tags
+
+
+```python 
+
+
+def login_user(request):
+    if request.method == 'POST':
+        username=request.POST.cleaned_data['username']
+        password=request.POST.cleaned_data['password']
+        user = authenticate(request,username=username,password=password)
+        if user is not None:
+            login(request,user)
+            messages.success(request,(f'You just logged in dear {user.first_name}'))
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            return redirect('website:index')
+
+
+    return render(request,'account/login.html',{
+    })
+
+#this code has a lesson, how to use the next param!!!!
+```
+
+
+
+
+# Mordad 8th 11:30 pm
+============================================================================================
+**its an important lesson**
+```python 
+
+
+class LoginForm(forms.Form):
+     class Meta:
+          moddel=User
+          fields=['username','password']
+          
+     def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['placeholder'] = 'Username'
+        self.fields['password'].widget.attrs['class'] = 'form-control'
+        self.fields['password'].widget.attrs['placeholder'] = '*******'
+
+# first! you should sue the Meta class with forms.Modleform!!!!!!!
+
+
+### Explanation
+
+1. Use of forms.Form: Since you're creating a login form that doesn't directly map to a model, you should use forms.Form instead of forms.ModelForm.
+
+2. Field Definitions: The username and password fields are defined as class attributes of the LoginForm. Each field can have its own widget and attributes.
+
+3. Initialization Method: You don't need to override the init method unless you want to add additional customization beyond setting widget attributes. In this case, we set the attributes directly when defining the fields.
+
+```
+
+
+**next parameter**
+
+```html
+
+{% if request.GET.next %}
+<input type="hidden" name="next" value="{{request.GET.next}}">
+{% endif %}
+
+```
+```python 
+#in login view
+    if 'next' in request.POST:
+        return redirect(request.POST.get('next'))
+    return redirect('website:index')
+
+
+```
+
+
+# quick question 
+- when you define a default for an image, how does djnago find the image?
+
+
+
+**EDIT PROFILE OF THE USER**
+```python 
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','first_name','last_name', 'email']  # Add other user fields as necessary
+        widgets={
+            'username':forms.CharField(max_length=150,attrs={'class':'form-control'}),
+            'last_name':forms.CharField(max_length=150,attrs={'class':'form-control'}),
+            'first_name':forms.CharField(max_length=150,attrs={'class':'form-control'}),
+            'email':forms.EmailField(max_length=150,attrs={'class':'form-control'})
+        }
+
+        # this code is going to get an erro cause of the attrs!
+
+
+
+
+
+#         The issue you're encountering is due to the fact that the widgets attribute in a Django ModelForm should map field names to widget instances, not to field definitions. In your UserForm, you're trying to define the fields again inside the widgets dictionary, which is incorrect.
+
+# Here's how you can correctly specify custom widgets for your form fields:
+
+### Corrected UserForm
+
+from django import forms
+from django.contrib.auth.models import User
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']  # Add other user fields as necessary
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'max_length': 150}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'max_length': 150}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'max_length': 150}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'max_length': 150}),
+        }
+
+
+```
+
+
+
+# Mordad 8th 4:50 pm
+**I am happy to say that i was able to handle two forms at the same time**
+I mean the edit form is a combination of the userForm and the ProfileForm
+
+```python 
+#views
+@login_required
+def edit_profile(request):
+    profile = request.user.profile 
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST,request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('website:index')  # Redirect to a success page or profile page
+
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=profile)
+
+    return render(request, 'account/edit_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    })
+
+
+#forms
+
+```

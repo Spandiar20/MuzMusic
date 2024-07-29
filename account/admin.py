@@ -17,7 +17,7 @@ class ProfileInline(admin.StackedInline):
 class UserAdmin(admin.ModelAdmin):
     model=User
     #just display username field on  admin page
-    fields=['username']
+    fields=['username','password','email']
     inlines=[ProfileInline]
 
 

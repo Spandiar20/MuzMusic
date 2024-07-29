@@ -6,7 +6,7 @@ class Profile(models.Model):
     follow = models.ManyToManyField('self',related_name='follwed_by',
                                     symmetrical=False,blank=True)
     bio = models.TextField(default='No Bio')
-    profile_image = models.ImageField(upload_to='profile_images',default='no_picture.png')
+    profile_image = models.ImageField(upload_to='profile_images',default='default_profile.png')
     linkedin_id=models.CharField(max_length=120,blank=True,null=True,default='s')
     instagram_id=models.CharField(max_length=120,blank=True,null=True,default='s')
     telegram_id=models.CharField(max_length=120,blank=True,null=True,default='s')

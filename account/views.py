@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.urls import reverse
 from .forms import SignUpForm,LoginForm,ProfileForm,UserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
@@ -6,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.safestring import mark_safe
 from django.views.generic import ListView
 from .models import Profile
+from utils import follow_unfollow
 
 def register_user(request):
     form=SignUpForm()
@@ -23,7 +25,8 @@ def register_user(request):
             user=authenticate(username=username,password=password)
             login(request,user)
             messages.success(request,(f'Welcome to MuzMusic dear {first_name}'))
-            return redirect('website:index')
+            return redirect(reverse('account:bio', kwargs={'username': username}))
+
         else:
              for field, errors in form.errors.items():
                 messages.add_message(request, messages.ERROR,mark_safe( f"Field {field} has the following errors: {errors}"))
@@ -31,6 +34,21 @@ def register_user(request):
         'form':form
     })
 
+def bio(request,username):
+    form=ProfileForm(request.POST or None)
+    profile=Profile.objects.get(user__username=username)
+    if request.method == 'POST':
+        if form.is_valid():
+            bio = form.cleaned_data['bio']
+            image = form.cleaned_data['profile_image']
+            profile.bio=bio
+            profile.profile_image=image
+            profile.save()
+            return redirect('website:index')
+
+    return render(request,'account/bio.html',{
+        'form':form
+    })
 
 
 @login_required
@@ -93,17 +111,11 @@ def members_profile(request):
     profiles=Profile.objects.all()
     if request.user.is_authenticated:
         if request.method == 'POST':
-            current_user_profile=request.user.profile
-            action=request.POST['follow']
-            target_profile=request.POST['target_profile']
-            if action == 'unfollow':
-                current_user_profile.follows.remove(target_profile)
-            else:
-                current_user_profile.follows.add(target_profile)
-            current_user_profile.save()    
-    return render(request,'account/members.html',{
-        'profiles':profiles
-    })
+            current_user_profile = request.user.profile
+            target_profile = Profile.objects.get(id=request.POST['target_profile'])
+            follow_unfollow(current_user_profile, target_profile)
+
+    return render(request, 'account/members.html', {'profiles': profiles})
 
 
 

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import BlogSingleView,BasePostListView,BlogAuthorView,BlogCategoryView,BlogHomeView,likeView
+from .views import BlogSingleView,BasePostListView,BlogAuthorView,BlogCategoryView,BlogHomeView,likeView,PostCreateView
 
 app_name='blog'
 
@@ -11,4 +11,5 @@ urlpatterns = [
     path('', BlogHomeView.as_view(), name='blog_home'),
         # This will handle the default case with pagination
     path('like/<int:pk>',likeView, name='like_post'),
+    path('post-create/<str:username>',PostCreateView.as_view(),name='post_create')
    ]

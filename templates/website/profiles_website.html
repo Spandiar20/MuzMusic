@@ -24,11 +24,11 @@
                                     <a href="#">Follow</a>
                                 </li>
                                 <li>
-                                    <a href="#">View the Posts</a>
+                                    <a href="{% url 'blog:blog_author' profile.user.username %}">View the Posts</a>
                                 </li>											
                             </ul>
                         </div>
-                        <a href="#"><h4 class="title">{{profile.user.username}}</h4></a>
+                        <a href="{% url 'blog:blog_author' profile.user.username %}"><h4 class="title">{{profile.user.username}}</h4></a>
                         <p>
                             {{profile.bio|slice:":40"}}
                         </p>

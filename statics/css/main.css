@@ -2509,7 +2509,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 /*-------- Start Banner Area ------------*/
 .banner-area {
-  background: url(../images/blog_background.jpg) center;
+  background: url(../images/index_background.jpg) center;
   background-size: cover;
 }
 
@@ -3034,7 +3034,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .about-banner {
-  background: url(../images/blog_background.jpg) center;
+  background: url(../images/kit_jarret.jpg) center;
   background-size: cover;
 }
 

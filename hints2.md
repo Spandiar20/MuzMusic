@@ -103,3 +103,23 @@ for the functions which do not really provide a template , for example a likeVie
 
 # i did this and the server stops when clicking on the like button!!!!!!!!!!!!!!!!!!!!!!!
 ```
+
+
+
+# i wasnt able to make the custom login_url for login_reuired decorator
+So i changed the url of the login view to accounts/login from account/login and 
+the problem was solved!
+
+
+# now i want to make the following func work!
+
+
+
+
+
+
+# registration form
+**Mordad 11th 1:00 am**
+
+first the user inputs some data to register then before going to the index he goes to another page for the profile form, i used the bio method for it and i couldnt use the existing functions ,
+i used the ProfileForm .

@@ -39,7 +39,7 @@
                       <div class="col-lg-6 col-sm-6 col-6 header-top-left">
 						{% if request.user.is_authenticated %}
                           <ul>
-                              <li><a href="#">Logged in as {{request.user.username}}</a></li>
+                              <li><a href="{% url 'blog:blog_author' user.username %}">Logged in as {{request.user.username}}</a></li>
                               <li><a href="{% url 'account:logout' %}">Logout</a></li>
                           </ul>		
 						  {% else %}	
@@ -63,9 +63,9 @@
                 <div class="row align-items-center justify-content-between d-flex">
                   <div id="logo">
 					{% if request.user.is_authenticated %}
-                    <a href="index.html"><img src="{{request.user.profile.profile_image.url}}" alt="" title="" /></a>
+                    <a href="{% url 'blog:blog_author' user.username %}"><img src="{{request.user.profile.profile_image.url}}" alt="" title="" /></a>
 					{% else %}
-					<a href="index.html"><img src="{% static 'images/default_profile.png' %}" alt="" title="" /></a>
+					<a href="{% url 'account:login' %}"><img src="{% static 'images/default_profile.png' %}" alt="" title="" /></a>
 					{% endif %}
 
 				</div>
@@ -75,6 +75,8 @@
 					
                     <ul class="nav-menu">
 						{% if request.user.is_authenticated %}
+						<li class="menu-has-children"><a href="{% url 'account:members' %}">Create Post</a>	
+						</li>		
 						<li class="menu-has-children"><a href="">My Profile </a>
 							<ul>
 							  <li><a href="{% url  'blog:blog_author' request.user.username %}">My Page</a></li>

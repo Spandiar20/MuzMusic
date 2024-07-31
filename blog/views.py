@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .forms import PostCreateForm
 
 
 # class BlogView(ListView):
@@ -145,9 +146,19 @@ class BlogSingleView(DetailView):
 #             return HttpResponseRedirect(reverse('blog:blog_author',kwargs={'author_name':s}))        
 
 
+class PostCreateView(CreateView):
+    template_name='blog/create-post.html'
+    model=Post
+    form=PostCreateForm
+
+
+
+
+
 @login_required
 def likeView(request,pk):
-    post=get_object_or_404(Post,id=request.POST.get('post_id'))
+    post=get_object_or_404(Post,id=pk)
+
     liked =False
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)

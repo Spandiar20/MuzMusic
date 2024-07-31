@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
-    follow = models.ManyToManyField('self',related_name='follwed_by',
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
+    follows = models.ManyToManyField('self',related_name='followed_by',
                                     symmetrical=False,blank=True)
     bio = models.TextField(default='No Bio')
     profile_image = models.ImageField(upload_to='profile_images',default='default_profile.png')

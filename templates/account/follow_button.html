@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="button-group-area mt-10">
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="target_profile" value="{{profile.id}}">
+        {% if profile in user.profile.follows.all %}
+            <button href="#" name="follow" type="submit" value="unfollow" class="genric-btn success-border medium">Following</button>
+
+        {% else %}	
+            <button href="#" value="follow" name="follow" type="submit" class="genric-btn success-border medium">Follow</button>
+
+
+        {% endif %}
+    </form>
+</div>

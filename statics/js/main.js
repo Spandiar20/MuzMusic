@@ -98,8 +98,8 @@ $(document).ready(function() {
             loop: true,
             margin: 30,
             dots: true,
-            autoplayHoverPause: true, 
-            smartSpeed:500,               
+            autoplayHoverPause: true,
+            smartSpeed:500,
             autoplay: true,
             responsive: {
                 0: {
@@ -113,9 +113,42 @@ $(document).ready(function() {
                 },
                 961: {
                     items: 3,
+                },
+                1200: {
+                    items: 5,
                 }
             }
-        }); 
+        });
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
 
     //------- Mobile Nav  js --------//  
 

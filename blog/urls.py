@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import BlogSingleView,BasePostListView,BlogAuthorView,BlogCategoryView,BlogHomeView
+from .views import BlogSingleView,BasePostListView,BlogAuthorView,BlogCategoryView,BlogHomeView,likeView
 
 app_name='blog'
 
@@ -8,6 +8,7 @@ urlpatterns = [
     path('single-view/<int:pk>',BlogSingleView.as_view(), name='single_view'),
     path('category/<str:cat_name>/', BlogCategoryView.as_view(), name='blog_category'),
     path('author/<str:author_name>/', BlogAuthorView.as_view(), name='blog_author'),
-    path('', BlogHomeView.as_view(), name='blog_home')
+    path('', BlogHomeView.as_view(), name='blog_home'),
         # This will handle the default case with pagination
+    path('like/<int:pk>',likeView, name='like_post'),
    ]

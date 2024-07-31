@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.safestring import mark_safe
-
+from django.views.generic import ListView
+from .models import Profile
 
 def register_user(request):
     form=SignUpForm()
@@ -87,7 +88,22 @@ def edit_profile(request):
     })
 
 
-
+# follwing and unfollowing
+def members_profile(request):
+    profiles=Profile.objects.all()
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            current_user_profile=request.user.profile
+            action=request.POST['follow']
+            target_profile=request.POST['target_profile']
+            if action == 'unfollow':
+                current_user_profile.follows.remove(target_profile)
+            else:
+                current_user_profile.follows.add(target_profile)
+            current_user_profile.save()    
+    return render(request,'account/members.html',{
+        'profiles':profiles
+    })
 
 
 

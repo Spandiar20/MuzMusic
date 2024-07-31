@@ -1,0 +1,43 @@
+{% load static %}
+
+<section class="recent-blog-area section-gap" >
+    <div class="container" >
+        <div class="row d-flex justify-content-center" style="margin-top:0px ;">
+            <div class="menu-content pb-60 col-lg-9">
+                <div class="title text-center">
+                    <h1 class="mb-10">Lets get to Know our Cool members!</h1>
+                    <p>Come on just join our community! We have left seat for you!</p>
+                </div>
+            </div>
+        </div>							
+        <div class="row">
+            <div class="active-recent-blog-carusel">
+                {% for profile in random_profiles %}
+                <div class="single-recent-blog-post item">
+                    <div class="thumb">
+                        <img class="img-fluid" style="border-radius: 50%; width: 140px; height: 140px; object-fit: cover;" src="{{profile.profile_image.url}}" alt="">
+                    </div>
+                    <div class="details">
+                        <div class="tags">
+                            <ul>
+                                <li>
+                                    <a href="#">Follow</a>
+                                </li>
+                                <li>
+                                    <a href="#">View the Posts</a>
+                                </li>											
+                            </ul>
+                        </div>
+                        <a href="#"><h4 class="title">{{profile.user.username}}</h4></a>
+                        <p>
+                            {{profile.bio|slice:":40"}}
+                        </p>
+                    </div>	
+                </div>
+                {% endfor %}
+                                                    
+
+            </div>
+        </div>
+    </div>	
+</section>

@@ -10,7 +10,7 @@ def post_save_create_profile(sender,instance,created,**kwargs):
         user_profile=Profile(user=instance)
         user_profile.save()
         #Each user should follow him/herself
-        user_profile.follow.set([instance.profile.id])
+        user_profile.follows.set([instance.profile.id])
         user_profile.save()
 
 #post_save.connect(post_save_create_profile,sender=User) => without the decorator        

@@ -25,6 +25,9 @@ class Post(models.Model):
     post_author=models.ForeignKey(User,on_delete=models.CASCADE)
     likes=models.ManyToManyField(User,related_name='post_likes',null=True,blank=True)
 
+    def total_likes(self):
+       return self.likes.count()
+
     def get_absolute_url(self):
        return reverse('blog:single_view',kwargs={'pk':self.id})
 

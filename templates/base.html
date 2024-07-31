@@ -67,18 +67,29 @@
 					{% else %}
 					<a href="index.html"><img src="{% static 'images/default_profile.png' %}" alt="" title="" /></a>
 					{% endif %}
+
 				</div>
+				
+				
                   <nav id="nav-menu-container">
 					
                     <ul class="nav-menu">
+						{% if request.user.is_authenticated %}
+						<li class="menu-has-children"><a href="">My Profile </a>
+							<ul>
+							  <li><a href="{% url  'blog:blog_author' request.user.username %}">My Page</a></li>
+							  <li><a href="{% url 'account:edit_profile' %}">Edit Profile</a></li>
+							</ul>
+						  </li>	
+						{% endif %}  	
+						<li class="menu-has-children"><a href="{% url 'account:members' %}">Friends(You!)</a>	
+						</li>					      
                       <li><a href="{% url 'website:index' %}">Home</a></li>
                       <li><a href="{% url 'website:about' %}">About</a></li>
                       <li class="menu-has-children"><a href="{% url 'blog:blog_home' %}">Blog</a>
                         
                       </li>	
-                      <li class="menu-has-children"><a href="">Pages</a>
-                        
-                      </li>					          					          		          
+                        					          		          
                       <li><a href="{% url 'website:contact' %}">Contact</a></li>
                     </ul>
                   </nav><!-- #nav-menu-container -->					      		  

@@ -7,25 +7,25 @@ from django.contrib.auth.models import User
 #admin.site.register(Profile)
 
 
+admin.site.register(Profile)
+
+# #mix profile info with user info
+# class ProfileInline(admin.StackedInline):
+#     model=Profile
 
 
-#mix profile info with user info
-class ProfileInline(admin.StackedInline):
-    model=Profile
+# class UserAdmin(admin.ModelAdmin):
+#     model=User
+#     #just display username field on  admin page
+#     fields=['username','password','email']
+#     inlines=[ProfileInline]
 
 
-class UserAdmin(admin.ModelAdmin):
-    model=User
-    #just display username field on  admin page
-    fields=['username','password','email']
-    inlines=[ProfileInline]
+# #unregister the initial user
+# admin.site.unregister(User)
 
-
-#unregister the initial user
-admin.site.unregister(User)
-
-#register the new user panel
-admin.site.register(User,UserAdmin)
-#When wecreat the ProfileInline class  there is no need for the above line
+# #register the new user panel
+# admin.site.register(User,UserAdmin)
+# #When wecreat the ProfileInline class  there is no need for the above line
 
 

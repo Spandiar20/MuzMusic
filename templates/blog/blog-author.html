@@ -132,9 +132,15 @@
 
 
 
+
+
+
+
+
+
+
+
 						{% if no_results_message %}
-
-
 						<div class="single-post row">
 							<div class="col-lg-3  col-md-3 meta-details">
 								<ul class="tags">
@@ -160,8 +166,18 @@
 								<a href="{% url 'blog:blog_view' %}" class="primary-btn">Go Back</a>
 							</div>
 						</div>
-
 						{% endif %}
+
+
+
+
+
+
+
+
+
+
+
 					{% if is_paginated %}			
 					<nav class="blog-pagination justify-content-center d-flex">
 						<ul class="pagination">
@@ -210,9 +226,9 @@
 								{% writer_widget username %}
 								{% profile_following username %}
 								<!-- this tag is to load the list of the people the author follws and is followed by-->
-								{% popular_posts %}
+								<!-- {% popular_posts %} -->
 								{% include 'blog/ads.html' %}
-								{% post_category %}
+								<!-- {% post_category %} -->
 													
 							</div>
 						</div>

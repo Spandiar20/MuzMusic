@@ -123,3 +123,48 @@ the problem was solved!
 
 first the user inputs some data to register then before going to the index he goes to another page for the profile form, i used the bio method for it and i couldnt use the existing functions ,
 i used the ProfileForm .
+
+
+
+
+# Mordad 11th 
+i started the day fresh . Lets go!
+
+**making the follow button avalable in the index page**
+
+
+
+
+
+
+
+# BIG VOW
+form now , whenever i want to use only a tags whenever i want to post something only with a button! becouse its a hard to style a button and i want ot use a tag to head to a func
+
+i added the follow button to the index page and its working fine with help pf ai actually to provide me a nice CBV 
+the thing is that i cant style its buttom
+
+
+
+# Mordad 11th 11 am
+**Heading to post create form**
+
+```python
+class PostCreateForm(forms.ModelForm):
+    category= forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+    class Meta:
+        model = Post
+        fields = ['title', 'post_author', 'category', 'content', 'image_file', 'audio_file']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+```
+this code is so instructive, i learnde how to have a manytomany fiekd in a form
+
+
+**i should add another condiotion to popular posts rather than the coundted views**
+i should add the date for at most 3 days

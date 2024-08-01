@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 from .models import Post
 from django.db.models import Q,F
@@ -8,7 +8,8 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import PostCreateForm
-
+from django.utils.safestring import mark_safe
+from django.contrib import messages
 
 # class BlogView(ListView):
 #     model=Post
@@ -38,8 +39,9 @@ from .forms import PostCreateForm
 
 class BasePostListView(ListView):
     model = Post
-    paginate_by = 1  # Default pagination
+    paginate_by = 5  # Default pagination
     context_object_name='posts'
+    ordering=['-id']
 
     def get_queryset(self):
         queryset = super().get_queryset()  # Retrieve all posts by default
@@ -149,9 +151,24 @@ class BlogSingleView(DetailView):
 class PostCreateView(CreateView):
     template_name='blog/create-post.html'
     model=Post
-    form=PostCreateForm
+    # fields=['title','post_author','category','content','image_file','audio_file']
+    form_class = PostCreateForm
 
+    
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs['data'] = {'post_author': self.request.user}  # Set the default value for post_author field
+    #     return kwargs
 
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+             for field, errors in form.errors.items():
+                messages.add_message(request, messages.ERROR,mark_safe( f"Field {field} has the following errors: {errors}"))
+        return redirect('blog:blog_home')
+    
 
 
 

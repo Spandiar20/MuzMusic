@@ -8,17 +8,18 @@ for item in choices:
     choice_list.append(item)
 
 class PostCreateForm(forms.ModelForm):
+    category= forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
     class Meta:
-        model=Post
-        fields=['title','post_author','category','content','image_file','audio_file']
+        model = Post
+        fields = ['title', 'post_author', 'category', 'content', 'image_file', 'audio_file']
 
         widgets = {
-            'title':forms.TextInput(attrs={'class': 'form-control'}),
-            'post_author':forms.TextInput(attrs={'class': 'form-control','value':'','id':'elder','type':'hidden'}),
-            'category':forms.Select(choices=choice_list,attrs={'class':'form-control'}),
-            'content':forms.Textarea(attrs={'class': 'form-control'}),
-
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
 
  
 class PostEditForm(forms.ModelForm):
@@ -33,3 +34,6 @@ class PostEditForm(forms.ModelForm):
 
         }
  
+
+class FollowForm(forms.Form):
+    target_profile_id = forms.IntegerField(widget=forms.HiddenInput())

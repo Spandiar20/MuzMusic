@@ -37,8 +37,8 @@ def popular_posts():
 @register.inclusion_tag('blog/personal_page_info.html')
 def profile_following(username):
    profile=get_object_or_404(Profile,user__username=username)
-   following=profile.follows.all()
-   followed=profile.followed_by.all()
+   following=profile.follows.all().exclude(user__username=username)
+   followed=profile.followed_by.all().exclude(user__username=username)
 
    return{
       'following':following,

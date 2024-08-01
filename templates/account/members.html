@@ -10,15 +10,15 @@
 				<div class="container">				
 					<div class="row d-flex align-items-center justify-content-center">
 						<div class="about-content col-lg-12">
-							{% if user_pro %}
+							{% if request.user.is_authenticated %}
 							<h2 class="text-white">
-								You could make some firends!		
+								You could make some firends dear {{user.first_name}}!		
 							</h2>	
 							{% else %}
 							<h2 class="text-white">
 								Not a BlogMember Yet!?		
 							</h2>	
-							<p class="text-white link-nav"><a  href="" onclick="scrollToForm()"> Login/Signup </a>  <span class="lnr lnr-arrow-right"></span>  <a onclick="scrollToForm()"> Write your Own posts</a></p>
+							<p class="text-white link-nav"><a  href="{% url 'account:login' %}"> Login/Signup </a>  <span class="lnr lnr-arrow-right"></span>  <a onclick="scrollToForm()"> Write your Own posts</a></p>
 
 							{% endif %}
 						

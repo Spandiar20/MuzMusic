@@ -93,8 +93,9 @@ $(document).ready(function() {
         });
 
 
+
         $('.active-recent-blog-carusel').owlCarousel({
-            items: 3,
+            items: 4,
             loop: true,
             margin: 30,
             dots: true,
@@ -104,7 +105,7 @@ $(document).ready(function() {
             responsive: {
                 0: {
                     items: 1
-                },
+        },
                 480: {
                     items: 1,
                 },
@@ -115,13 +116,14 @@ $(document).ready(function() {
                     items: 3,
                 },
                 1200: {
-                    items: 5,
-                }
+                    items: 4,  // Update to show 4 items at 1200 pixels and above
+        }
             }
         });
-
+        
 
         
+
 
 
 

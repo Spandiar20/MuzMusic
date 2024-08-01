@@ -14,7 +14,7 @@
                     <img class="img-fluid" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover" src="{{person.profile_image.url}}" alt="">
                 </div>
                 <div class="details">
-                    <a href=""><h6>{{person.user.username}}</h6></a>
+                    <a href="{% url 'blog:blog_author' person.user.username %}"><h6>{{person.user.username}}</h6></a>
                    
   
                     <div class="button-group-area mt-10">

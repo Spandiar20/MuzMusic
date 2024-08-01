@@ -10,15 +10,15 @@ from django.contrib.auth.models import User
 admin.site.register(Profile)
 
 # #mix profile info with user info
-# class ProfileInline(admin.StackedInline):
-#     model=Profile
+class ProfileInline(admin.StackedInline):
+    model=Profile
 
 
-# class UserAdmin(admin.ModelAdmin):
-#     model=User
+class UserAdmin(admin.ModelAdmin):
+    model=User
 #     #just display username field on  admin page
-#     fields=['username','password','email']
-#     inlines=[ProfileInline]
+    fields=['username','password','email','first_name','last_name']
+    inlines=[ProfileInline]
 
 
 # #unregister the initial user

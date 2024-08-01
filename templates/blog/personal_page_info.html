@@ -15,8 +15,7 @@
                 </div>
                 <div class="details">
                     <a href="{% url 'blog:blog_author' person.user.username %}"><h6>{{person.user.username}}</h6></a>
-                   
-  
+ 
                     <div class="button-group-area mt-10">
                         <form method="POST" >
                             {% csrf_token %}
@@ -24,7 +23,6 @@
                                 <button href="#" name="follow" type="submit" value="unfollow" class="genric-btn  primary samll">Unfollow</button>
                         </form>
                     </div>
-
 
 
 

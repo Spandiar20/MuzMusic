@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post,Category
+from .models import Post,Category,Comment
 
 
 choices = Category.objects.all().values_list('title','title')
@@ -37,3 +37,13 @@ class PostEditForm(forms.ModelForm):
 
 class FollowForm(forms.Form):
     target_profile_id = forms.IntegerField(widget=forms.HiddenInput())
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model=Comment
+        fields=['content','post','comment_author']
+        widgets = {
+            'content':forms.Textarea(attrs={'class':'form-control mb-10','placeholder':'Share your thoughts...'})
+        }
+

@@ -27,7 +27,6 @@ class IndexView(TemplateView):
         context['follow_form'] = FollowForm()
         return context
     
-    @login_required
     def post(self, request, *args, **kwargs):
         form = FollowForm(request.POST)
         if form.is_valid():

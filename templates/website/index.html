@@ -365,6 +365,9 @@
 												<button type="submit">Follow</button>
 												{% endif %}
 										</form>
+										<li>
+											<a href="{% url 'blog:blog_author' profile.user.username %}">View the Posts</a>
+										</li>	
 									{% else %}
 									<a href="{% url 'account:login' %}" >Follow </a>	
                                 </li>

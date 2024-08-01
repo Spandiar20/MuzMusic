@@ -11,5 +11,5 @@ urlpatterns = [
     path('', BlogHomeView.as_view(), name='blog_home'),
         # This will handle the default case with pagination
     path('like/<int:pk>',likeView, name='like_post'),
-    path('post-create',PostCreateView.as_view(),name='post_create')
+    path('post-create',PostCreateView.as_view(),name='post_create'),
    ]

@@ -1,16 +1,16 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
-from .models import Post
+from django.views.generic import ListView,DetailView,CreateView,UpdateView,FormView
+from .models import Post,Comment
 from django.db.models import Q,F
 from account.models import Profile
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .forms import PostCreateForm
+from .forms import PostCreateForm,CommentForm
 from django.utils.safestring import mark_safe
 from django.contrib import messages
-
+from utils import follow_unfollow
 # class BlogView(ListView):
 #     model=Post
 #     template_name='blog/blog-home.html'
@@ -35,6 +35,10 @@ from django.contrib import messages
 #         if query and not context['posts']:
 #             context['no_results_message'] = f"No results found for '{query}'."
 #         return context   
+
+
+
+
 
 
 class BasePostListView(ListView):
@@ -101,24 +105,31 @@ class BlogHomeView(BasePostListView):
 
 
 
-
-
 class BlogSingleView(DetailView):
     model=Post 
     template_name='blog/blog-single.html'
     context_object_name='post'   
-
 
     def get_context_data(self,**kwargs):
         context= super().get_context_data(**kwargs)
         Post.objects.filter(id=self.kwargs.get('pk')).update(counted_views=F('counted_views') + 1)
         post_tobe_liked=get_object_or_404(Post,id=self.kwargs['pk'])
         total_likes=post_tobe_liked.total_likes()
+        post = self.get_object()
+        comments = Comment.objects.filter(post=post).order_by('-created')
+        
+        form=CommentForm()
+
         liked=False
         if post_tobe_liked.likes.filter(id=self.request.user.id).exists():
             liked=True
         context['liked']=liked
         context['total_likes']=total_likes    
+        context['comments'] = comments  # Add the comments to the context
+        context['form']=form
+        return context  
+    
+
         # if you use get instead of filter you are encountring an error! = > AttributeError at /blog/single-view/1
         # 'Post' object has no attribute 'update'
 
@@ -126,9 +137,15 @@ class BlogSingleView(DetailView):
         # post=Post.objects.get(id=self.kwargs.get('pk'))
         # post.counted_views +=1
         # post.save()
-        return context  
-    
+    def post(self, request, *args, **kwargs):
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                form.save()
+                # sometimes i dont understand difference between the obj and its id
+                return HttpResponseRedirect(reverse('blog:single_view',kwargs={'pk':self.get_object().id}))
 
+            return self.get(request, *args, **kwargs)
+       
 
 # i dont like this func, i am feeling some code smell
 # follwing and unfollowing
@@ -168,7 +185,7 @@ class PostCreateView(CreateView):
              for field, errors in form.errors.items():
                 messages.add_message(request, messages.ERROR,mark_safe( f"Field {field} has the following errors: {errors}"))
         return redirect('blog:blog_home')
-    
+        # actually i want to return the user the sigle page of the post but i cant!
 
 
 
@@ -185,3 +202,11 @@ def likeView(request,pk):
         liked=True
     return HttpResponseRedirect(reverse('blog:single_view',kwargs={'pk':pk}))        
 
+
+
+
+def follow_view(request,pk):
+    current_user_id=request.user.id
+    current_profile_id=pk
+    follow_unfollow(current_user_id,current_profile_id)
+    return HttpResponseRedirect(reverse('blog:author_view', ))

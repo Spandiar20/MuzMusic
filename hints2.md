@@ -168,3 +168,43 @@ this code is so instructive, i learnde how to have a manytomany fiekd in a form
 
 **i should add another condiotion to popular posts rather than the coundted views**
 i should add the date for at most 3 days
+================================================================================================================================================================================i wasnt able to solve this problem
+
+
+
+# Mordada 11th 
+working on the comments
+
+**when working with cbv if you have detailview and you want to have form lets say for comment ... what to do?**
+
+should i have two classes  or do the whole thing in one class
+
+
+
+
+
+
+
+
+
+
+
+================================================================================================================================================================================
+i dont understand how to use the widgets ? in the Meta class our outside of it?
+how is it gonna dieffer
+
+```python 
+
+
+# while widget was outside of the Meta it wasnt working
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model=Comment
+        fields=['content']
+        widgets = {
+            'content':forms.Textarea(attrs={'class':'form-control mb-10'})
+        }
+
+
+
+```

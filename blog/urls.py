@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import BlogSingleView,BasePostListView,BlogAuthorView,BlogCategoryView,BlogHomeView,likeView,PostCreateView
+from .views import BlogSingleView,BasePostListView,BlogAuthorView,BlogCategoryView,BlogHomeView,likeView,PostCreateView,follow_unfollow
 
 app_name='blog'
 
@@ -12,4 +12,5 @@ urlpatterns = [
         # This will handle the default case with pagination
     path('like/<int:pk>',likeView, name='like_post'),
     path('post-create',PostCreateView.as_view(),name='post_create'),
+    path('follow-unfollow',follow_unfollow,name='follow')
    ]

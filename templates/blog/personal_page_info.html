@@ -17,11 +17,20 @@
                     <a href="{% url 'blog:blog_author' person.user.username %}"><h6>{{person.user.username}}</h6></a>
  
                     <div class="button-group-area mt-10">
-                        <form method="POST" >
-                            {% csrf_token %}
-                            <input type="hidden" name="target_profile" value="{{person.id}}">
-                                <button href="#" name="follow" type="submit" value="unfollow" class="genric-btn  primary samll">Unfollow</button>
-                        </form>
+                       <form method="POST" action="{% url 'blog:follow' %}">
+										{% csrf_token %}
+										<input type="hidden" name="target_profile" value="{{person.user}}">
+										<input type="hidden" name="user_id" value="{{request.user}}">
+
+										{% if person in request.user.profile.follows.all %}
+											<button type="submit" class="genric-btn success-border medium">Following</button>
+
+										{% else %}	
+											<button  type="submit" class="genric-btn  primary samll">Follow</button>
+
+
+										{% endif %}
+									</form>
                     </div>
 
 
@@ -54,7 +63,9 @@
                         <form method="POST" >
                             {% csrf_token %}
                             <input type="hidden" name="target_profile" value="{{person1.id}}">
-                                <button href="#" name="follow" type="submit" value="unfollow" class="genric-btn  primary samll">Reomve</button>
+                            {% if person1 in user.profile.follows.all %}
+                                <button  type="submit"  class="genric-btn  primary samll">Following</button>
+                                {% endif %}
                         </form>
                     </div>
 

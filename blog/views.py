@@ -94,7 +94,13 @@ class BlogAuthorView(BasePostListView):
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
     
-        context['username']=self.kwargs['author_name']
+        username=self.kwargs['author_name']
+        profile=get_object_or_404(Profile,user__username=username)
+        following=profile.follows.all().exclude(user__username=username)
+        followed=profile.followed_by.all().exclude(user__username=username)
+        context['username']=username
+        context['following']=following
+        context['followed']=followed
         return context
 
 
@@ -205,8 +211,26 @@ def likeView(request,pk):
 
 
 
-def follow_view(request,pk):
-    current_user_id=request.user.id
-    current_profile_id=pk
-    follow_unfollow(current_user_id,current_profile_id)
-    return HttpResponseRedirect(reverse('blog:author_view', ))
+# def follow_view(request,pk):
+#     current_user_id=request.user.id
+#     current_profile_id=pk
+#     follow_unfollow(current_user_id,current_profile_id)
+#     return HttpResponseRedirect(reverse('blog:author_view', ))
+
+
+def follow_unfollow(request):
+    if request.method == 'POST':
+        target_profile=Profile.objects.get(user__username=request.POST.get('target_profile'))
+        current_user_profile=Profile.objects.get(user__username=request.POST.get('user_id'))
+        print(current_user_profile,target_profile)
+        action = current_user_profile.follows.filter(id=target_profile.id).exists()
+
+        if action:
+            print('remove')
+            current_user_profile.follows.remove(target_profile.id)
+        else:
+            print('add')
+            current_user_profile.follows.add(target_profile.id)
+
+        return redirect(request.META.get('HTTP_REFERER', '/default_redirect_url/'))
+    

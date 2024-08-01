@@ -109,11 +109,11 @@ def edit_profile(request):
 # follwing and unfollowing
 def members_profile(request):
     profiles=Profile.objects.all()
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            current_user_profile = request.user.profile
-            target_profile = Profile.objects.get(id=request.POST['target_profile'])
-            follow_unfollow(current_user_profile, target_profile)
+    # if request.user.is_authenticated:
+    #     if request.method == 'POST':
+    #         current_user_profile = request.user.profile
+    #         target_profile = Profile.objects.get(id=request.POST['target_profile'])
+    #         follow_unfollow(current_user_profile, target_profile)
 
     return render(request, 'account/members.html', {'profiles': profiles})
 

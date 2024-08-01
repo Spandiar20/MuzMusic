@@ -30,61 +30,7 @@
 
 			<!-- Start top-category-widget Area -->
 			<section class="top-category-widget-area pt-90 pb-90 ">
-				<div class="container">
-					<div class="row">		
-						<div class="col-lg-4">
-							<div class="single-cat-widget">
-								<div class="content relative">
-									<div class="overlay overlay-bg"></div>
-								    <a href="#" target="_blank">
-								      <div class="thumb">
-								  		 <img class="content-image img-fluid d-block mx-auto" src="{% static 'images/blog/cat-widget1.jpg' %}" alt="">
-								  	  </div>
-								      <div class="content-details">
-								        <h4 class="content-title mx-auto text-uppercase">Social life</h4>
-								        <span></span>								        
-								        <p>Enjoy your social life together</p>
-								      </div>
-								    </a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="single-cat-widget">
-								<div class="content relative">
-									<div class="overlay overlay-bg"></div>
-								    <a href="#" target="_blank">
-								      <div class="thumb">
-								  		 <img class="content-image img-fluid d-block mx-auto" src="{% static 'images/blog/cat-widget2.jpg' %}" alt="">
-								  	  </div>
-								      <div class="content-details">
-								        <h4 class="content-title mx-auto text-uppercase">Politics</h4>
-								        <span></span>								        
-								        <p>Be a part of politics</p>
-								      </div>
-								    </a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="single-cat-widget">
-								<div class="content relative">
-									<div class="overlay overlay-bg"></div>
-								    <a href="#" target="_blank">
-								      <div class="thumb">
-								  		 <img class="content-image img-fluid d-block mx-auto" src="{% static 'images/blog/cat-widget3.jpg' %}" alt="">
-								  	  </div>
-								      <div class="content-details">
-								        <h4 class="content-title mx-auto text-uppercase">Food</h4>
-								        <span></span>
-								        <p>Let the food be finished</p>
-								      </div>
-								    </a>
-								</div>
-							</div>
-						</div>												
-					</div>
-				</div>	
+				<!-- this is left for the style of the page -->
 			</section>
 			<!-- End top-category-widget Area -->
 
@@ -224,8 +170,97 @@
 								</div>
 								
 								{% writer_widget username %}
-								{% profile_following username %}
-								<!-- this tag is to load the list of the people the author follws and is followed by-->
+
+
+
+
+
+								<div class="single-sidebar-widget popular-post-widget">
+									<h4 class="popular-title">Following</h4>
+									<div class="popular-post-list">
+										<div class="container"> <!--i added this div to make the appearance of the images more in the center (mine)-->
+								
+										{% for person in following %}
+											<div class="single-post-list d-flex flex-row align-items-center">
+												<div class="thumb" >
+													<img class="img-fluid" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover" src="{{person.profile_image.url}}" alt="">
+												</div>
+												<div class="details">
+													<a href="{% url 'blog:blog_author' person.user.username %}"><h6>{{person.user.username}}</h6></a>
+								 
+													<div class="button-group-area mt-10">
+													   <form method="POST" action="{% url 'blog:follow' %}">
+																		{% csrf_token %}
+																		<input type="hidden" name="target_profile" value="{{person.user}}">
+																		<input type="hidden" name="user_id" value="{{request.user}}">
+								
+																		{% if person in request.user.profile.follows.all %}
+																			<button type="submit" class="genric-btn  primary samll"">Following</button>
+								
+																		{% else %}	
+																			<button  type="submit" class="genric-btn  primary samll">Follow</button>
+								
+								
+																		{% endif %}
+																	</form>
+													</div>
+								
+								
+								
+								
+												</div>
+											
+											</div>
+										{% endfor %}
+									</div>
+																	  
+									</div>
+								</div>
+								
+								<div class="single-sidebar-widget popular-post-widget">
+									<h4 class="popular-title">Followed By</h4>
+									<div class="popular-post-list">
+										<div class="container"> <!--i added this div to make the appearance of the images more in the center (mine)-->
+								
+										{% for person1 in followed %}
+											<div class="single-post-list d-flex flex-row align-items-center">
+												<div class="thumb" >
+													<img class="img-fluid" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover" src="{{person1.profile_image.url}}" alt="">
+												</div>
+												<div class="details">
+													<a href=""><h6>{{person1.user.username}}</h6></a>
+												   
+								  
+													<div class="button-group-area mt-10">
+
+														<form method="POST" action="{% url 'blog:follow' %}">
+															{% csrf_token %}
+															<input type="hidden" name="target_profile" value="{{person1.user}}">
+															<input type="hidden" name="user_id" value="{{request.user}}">
+					
+															{% if person1 in request.user.profile.follows.all %}
+																<button type="submit" class="genric-btn  primary samll"">Following</button>
+					
+															{% else %}	
+																<button  type="submit" class="genric-btn  primary samll">Follow</button>
+					
+					
+															{% endif %}
+														</form>
+													</div>
+								
+								
+								
+								
+								
+												</div>
+											
+											</div>
+										{% endfor %}
+									</div>
+																	  
+									</div>
+								</div>								<!-- this tag is to load the list of the people the author follws and is followed by-->
 								<!-- {% popular_posts %} -->
 								{% include 'blog/ads.html' %}
 								<!-- {% post_category %} -->

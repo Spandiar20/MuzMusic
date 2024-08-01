@@ -76,7 +76,7 @@
                     <ul class="nav-menu">
 						{% if request.user.is_authenticated %}
 						<li class="menu-has-children"><a href="{% url 'blog:post_create' %}">Create Post</a>	
-						</li>		
+						</li>		 
 						<li class="menu-has-children"><a href="">My Profile </a>
 							<ul>
 							  <li><a href="{% url  'blog:blog_author' request.user.username %}">My Page</a></li>

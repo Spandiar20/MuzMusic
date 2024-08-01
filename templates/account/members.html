@@ -65,9 +65,11 @@
 								</div>
 								{% if not request.user.id == profile.id %}
 								<div class="button-group-area mt-10">
-									<form method="POST" action="{% url 'account:members' %}">
+									<form method="POST" action="{% url 'blog:follow' %}">
 										{% csrf_token %}
-										<input type="hidden" name="target_profile" value="{{profile.id}}">
+										<input type="hidden" name="target_profile" value="{{profile.user}}">
+										<input type="hidden" name="user_id" value="{{request.user}}">
+
 										{% if profile in user.profile.follows.all %}
 											<button type="submit" class="genric-btn success-border medium">Following</button>
 

@@ -35,7 +35,7 @@ def register_user(request):
     })
 
 def bio(request,username):
-    form=ProfileForm(request.POST or None)
+    form=ProfileForm(request.POST,request.FILES or None)
     profile=Profile.objects.get(user__username=username)
     if request.method == 'POST':
         if form.is_valid():
@@ -44,6 +44,8 @@ def bio(request,username):
             profile.bio=bio
             profile.profile_image=image
             profile.save()
+            print('sssssssssssssssssssssssssssssssssss')
+
             return redirect('website:index')
 
     return render(request,'account/bio.html',{

@@ -65,7 +65,7 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['bio', 'profile_image']  # Add other profile fields as necessary
         widgets={
-            'bio':forms.Textarea(attrs={'class':'form-control'})
+            'bio':forms.Textarea(attrs={'class':'form-control','placeholder':'Let us know you even more!'})
         }
 
 class EditUserProfileForm(forms.Form):

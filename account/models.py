@@ -5,7 +5,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
     follows = models.ManyToManyField('self',related_name='followed_by',
                                     symmetrical=False,blank=True)
-    bio = models.TextField(default='No Bio')
+    bio = models.TextField(default='No Bio',blank=True)
     profile_image = models.ImageField(upload_to='profile_images',default='default_profile.png')
     linkedin_id=models.CharField(max_length=120,blank=True,null=True,default='s')
     instagram_id=models.CharField(max_length=120,blank=True,null=True,default='s')

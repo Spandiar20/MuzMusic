@@ -44,7 +44,6 @@ def bio(request,username):
             profile.bio=bio
             profile.profile_image=image
             profile.save()
-            print('sssssssssssssssssssssssssssssssssss')
 
             return redirect('website:index')
 
@@ -73,7 +72,7 @@ def login_user(request):
             user = authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
-                messages.success(request,(f'You just logged in dear {request.user.first_name}'))
+                #messages.success(request,(f'You just logged in dear {request.user.first_name}'))
                 if 'next' in request.POST:
                     return redirect(request.POST.get('next'))
                 return redirect('website:index')
@@ -107,42 +106,10 @@ def edit_profile(request):
         'profile_form': profile_form,
     })
 
-
-# follwing and unfollowing
+@login_required
 def members_profile(request):
     profiles=Profile.objects.all()
-    # if request.user.is_authenticated:
-    #     if request.method == 'POST':
-    #         current_user_profile = request.user.profile
-    #         target_profile = Profile.objects.get(id=request.POST['target_profile'])
-    #         follow_unfollow(current_user_profile, target_profile)
-
     return render(request, 'account/members.html', {'profiles': profiles})
 
-
-
-
-
-# def edit_profile(request):
-#     profile = request.user.profile
-#     user = request.user
-
-#     if request.method == 'POST':
-#         form = EditProfileForm(request.POST, instance=profile)
-
-#         if form.is_valid():
-#             profile = form.save(commit=False)
-#             profile.user = user  # Re-associate the User object
-#             profile.save()
-
-#             user.username = form.cleaned_data['username']
-#             user.email = form.cleaned_data['email']
-#             ...
-#             user.save()
-#             ...
-#     else:
-#         form = EditProfileForm(instance=profile)
-
-#     return render(request, 'edit_profile.html', {'form': form})
 
 

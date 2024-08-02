@@ -63,6 +63,9 @@
 								<div class="col-md-9 mt-sm-20 left-align-p">
 									<p>{{profile.bio}}</p>
 								</div>
+							
+						
+
 								{% if not request.user.id == profile.id %}
 								<div class="button-group-area mt-10">
 									<form method="POST" action="{% url 'blog:follow' %}">
@@ -79,7 +82,6 @@
 
 										{% endif %}
 									</form>
-								</div>
 								{% endif %}
 							</div>
 

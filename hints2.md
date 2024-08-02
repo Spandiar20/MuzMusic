@@ -208,3 +208,12 @@ class CommentForm(forms.ModelForm):
 
 
 ```
+
+
+
+# 13 Mordad 1:30 am
+ i restericted some pages by CBV and this line 
+ from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+now the only part i should worry is the follow buttons in the index and members page

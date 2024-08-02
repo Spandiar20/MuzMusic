@@ -17,20 +17,23 @@
                     <a href="{% url 'blog:blog_author' person.user.username %}"><h6>{{person.user.username}}</h6></a>
  
                     <div class="button-group-area mt-10">
-                       <form method="POST" action="{% url 'blog:follow' %}">
-										{% csrf_token %}
-										<input type="hidden" name="target_profile" value="{{person.user}}">
-										<input type="hidden" name="user_id" value="{{request.user}}">
+                        {% if not request.user.username == person.user.username %}
 
-										{% if person in request.user.profile.follows.all %}
-											<button type="submit" class="genric-btn success-border medium">Following</button>
+                        <form method="POST" action="{% url 'blog:follow' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="target_profile" value="{{person.user}}">
+                                            <input type="hidden" name="user_id" value="{{request.user}}">
 
-										{% else %}	
-											<button  type="submit" class="genric-btn  primary samll">Follow</button>
+                                            {% if person in request.user.profile.follows.all %}
+                                                <button type="submit" class="genric-btn  primary samll"">Following</button>
+
+                                            {% else %}	
+                                                <button  type="submit" class="genric-btn  primary samll">Follow</button>
 
 
-										{% endif %}
-									</form>
+                                            {% endif %}
+                                        </form>
+                        {% endif %}            
                     </div>
 
 
@@ -41,7 +44,7 @@
             </div>
         {% endfor %}
     </div>
-      								
+                                      
     </div>
 </div>
 
@@ -60,15 +63,23 @@
                    
   
                     <div class="button-group-area mt-10">
-                        <form method="POST" >
+                        {% if not request.user.username == person1.user.username %}
+                        <form method="POST" action="{% url 'blog:follow' %}">
                             {% csrf_token %}
-                            <input type="hidden" name="target_profile" value="{{person1.id}}">
-                            {% if person1 in user.profile.follows.all %}
-                                <button  type="submit"  class="genric-btn  primary samll">Following</button>
-                                {% endif %}
-                        </form>
-                    </div>
+                            <input type="hidden" name="target_profile" value="{{person1.user}}">
+                            <input type="hidden" name="user_id" value="{{request.user}}">
 
+                            {% if person1 in request.user.profile.follows.all %}
+                                <button type="submit" class="genric-btn  primary samll"">Following</button>
+
+                            {% else %}	
+                                <button  type="submit" class="genric-btn  primary samll">Follow</button>
+
+
+                            {% endif %}
+                        </form>
+                        {% endif %}
+                    </div>
 
 
 
@@ -78,6 +89,6 @@
             </div>
         {% endfor %}
     </div>
-      								
+                                      
     </div>
-</div>
+</div>		

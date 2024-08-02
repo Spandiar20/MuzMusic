@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load blog_custom_tags %}
-{% load account_custom_tags %}
 {% block content %}
 		  
 			<!-- start banner Area -->
@@ -198,7 +197,11 @@
 			                            <button type="submit"><i class="fa fa-search"></i></button>
 			                        </form>
 								</div>
-								{% writer_widget post.post_author.username %}
+
+								
+								{% include 'account/writer-info.html' %}
+
+
 								{% popular_posts %}
 								{% post_category %}
 								{% include 'blog/ads.html' %}

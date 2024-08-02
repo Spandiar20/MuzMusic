@@ -101,6 +101,7 @@ class BlogAuthorView(BasePostListView):
         context['username']=username
         context['following']=following
         context['followed']=followed
+        context['profile']=profile
         return context
 
 
@@ -122,10 +123,10 @@ class BlogSingleView(DetailView):
         post_tobe_liked=get_object_or_404(Post,id=self.kwargs['pk'])
         total_likes=post_tobe_liked.total_likes()
         post = self.get_object()
+        post_author=Profile.objects.get(user=post.post_author)
         comments = Comment.objects.filter(post=post).order_by('-created')
         
         form=CommentForm()
-
         liked=False
         if post_tobe_liked.likes.filter(id=self.request.user.id).exists():
             liked=True
@@ -133,6 +134,8 @@ class BlogSingleView(DetailView):
         context['total_likes']=total_likes    
         context['comments'] = comments  # Add the comments to the context
         context['form']=form
+        context['profile']=post_author
+        print(post_author)
         return context  
     
 

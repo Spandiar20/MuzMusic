@@ -69,13 +69,14 @@
 										{% csrf_token %}
 										<input type="hidden" name="target_profile" value="{{profile.id}}">
 										{% if profile in user.profile.follows.all %}
-											<button type="submit" class="genric-btn success-border medium">Following</button>
+											<button type="submit" class="genric-btn success-border medium main__user-suggestion__follow-btn">Following</button>
 
 										{% else %}	
-											<button  type="submit" class="genric-btn success-border medium">Follow</button>
+											<button  type="submit" class="genric-btn success-border medium main__user-suggestion__follow-btn">Follow</button>
 
 
 										{% endif %}
+										
 									</form>
 								</div>
 								{% endif %}

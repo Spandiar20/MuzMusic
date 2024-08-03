@@ -217,3 +217,65 @@ class CommentForm(forms.ModelForm):
 
 
 now the only part i should worry is the follow buttons in the index and members page
+
+
+
+# 13 Mordad 2:30 pa 
+**configuring the email system**
+```python
+#settings.py
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_USE_TLS=True
+EMAIL_PORT=587
+EMAIL_HOST_USER='maziarheidari1124@gmail.com'
+EMAIL_HOST_PASSWORD=EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') # not gonna work!
+```
+set EMAIL_HOST_PASSWORD="your_email_password"
+this command will set the vaiable for password
+
+the thing is that for the password you should create an app pssword instead of your gmail password
+
+follow below instructions:
+    Enable 2-Step Verification for your Google account:
+Go to <https://myaccount.google.com/signinoptions/two-step-verification>
+Follow the instructions to set up 2-Step Verification using your phone number.
+Create an app password:
+Go to <https://myaccount.google.com/apppasswords>
+Under "Select app," choose "Custom" and provide a name for the password.
+Click "Generate." Google will generate a 16-character app password.
+Update your Django settings to use the app password:
+Replace your actual Gmail password with the generated app password in your Django settings. This ensures your Django application can connect to the Gmail SMTP server securely.
+Update your settings.py file with the app password:
+Restart your Django application server.
+
+
+
+
+
+
+# 13 Mordad 4:30 pm
+now im trying to send the email via a nice looking html page 
+first i had to go to beefreee website to find a good email template
+then i created html file in the account directory and copied the code
+
+```python 
+#in the views
+
+from django.core.mail import send_mail,EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+ html_message=render_to_string('account/email.html')
+    plain_message= strip_tags(html_message)
+    message=EmailMultiAlternatives(subject='Welcome Mail',body=plain_message,from_email='maziarheidari1124@gmail.com',
+                     to=['sixifit732@eixdeal.com'] 
+                      )
+    message.attach_alternative(html_message,'text/html')
+    message.send()
+
+
+
+```
+
+and last stap lets pass vars to email template

@@ -8,6 +8,9 @@ from django.utils.safestring import mark_safe
 from django.views.generic import ListView
 from .models import Profile
 from utils import follow_unfollow
+from django.core.mail import send_mail,EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 def register_user(request):
     form=SignUpForm()
@@ -15,16 +18,37 @@ def register_user(request):
         form=SignUpForm(request.POST)
         if form.is_valid():
             user=form.save(commit=False)
-            user.first_name=form['first_name'].value().capitalize()
-            user.last_name=form['last_name'].value().capitalize()
+            # user.first_name=form['first_name'].value().capitalize()
+            # user.last_name=form['last_name'].value().capitalize()
+            user.first_name = form.cleaned_data['first_name'].capitalize()
+            user.last_name = form.cleaned_data['last_name'].capitalize()
             user.save()
-            first_name=form.cleaned_data['first_name']
+            first_name=user.first_name
+            last_name=user.last_name
+            welcome_message=f'Welcome to MuzMusic Dear {first_name} {last_name}'
+            blog_link='http://127.0.0.1:8000/blog/'
+            members_link='http://127.0.0.1:8000/accounts/members'
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
-           
+            context= {
+                'welcome_message':welcome_message,
+                'first_name':first_name,
+                'last_name':last_name,
+                'blog_link':blog_link,
+                'members_link':members_link
+            }
             user=authenticate(username=username,password=password)
             login(request,user)
+           
             messages.success(request,(f'Welcome to MuzMusic dear {first_name}'))
+            html_message=render_to_string('account/email.html',context=context)
+            plain_message= strip_tags(html_message)
+            message=EmailMultiAlternatives(subject='Welcome Mail',body=plain_message,from_email='maziarheidari1124@gmail.com',
+                     to=['maziarheidari1124@gmail.com'] 
+                      )
+            message.attach_alternative(html_message,'text/html')
+            message.send()
+            
             return redirect(reverse('account:bio', kwargs={'username': username}))
 
         else:

@@ -8,7 +8,7 @@ from django.urls import reverse
 class Category(models.Model):
     title=models.CharField(max_length=100)
     slug=models.SlugField()
-
+    category_image= models.ImageField(upload_to='post_image_files',default='default_profile.png')
     def __str__(self):
         return self.slug
     

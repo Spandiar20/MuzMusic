@@ -8,6 +8,9 @@ from django.utils.safestring import mark_safe
 from django.views.generic import ListView
 from .models import Profile
 from utils import follow_unfollow
+from django.core.mail import send_mail,EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 def register_user(request):
     form=SignUpForm()
@@ -15,16 +18,37 @@ def register_user(request):
         form=SignUpForm(request.POST)
         if form.is_valid():
             user=form.save(commit=False)
-            user.first_name=form['first_name'].value().capitalize()
-            user.last_name=form['last_name'].value().capitalize()
+            # user.first_name=form['first_name'].value().capitalize()
+            # user.last_name=form['last_name'].value().capitalize()
+            user.first_name = form.cleaned_data['first_name'].capitalize()
+            user.last_name = form.cleaned_data['last_name'].capitalize()
             user.save()
-            first_name=form.cleaned_data['first_name']
+            first_name=user.first_name
+            last_name=user.last_name
+            welcome_message=f'Welcome to MuzMusic Dear {first_name} {last_name}'
+            blog_link='http://127.0.0.1:8000/blog/'
+            members_link='http://127.0.0.1:8000/accounts/members'
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
-           
+            context= {
+                'welcome_message':welcome_message,
+                'first_name':first_name,
+                'last_name':last_name,
+                'blog_link':blog_link,
+                'members_link':members_link
+            }
             user=authenticate(username=username,password=password)
             login(request,user)
+           
             messages.success(request,(f'Welcome to MuzMusic dear {first_name}'))
+            html_message=render_to_string('account/email.html',context=context)
+            plain_message= strip_tags(html_message)
+            message=EmailMultiAlternatives(subject='Welcome Mail',body=plain_message,from_email='maziarheidari1124@gmail.com',
+                     to=['maziarheidari1124@gmail.com'] 
+                      )
+            message.attach_alternative(html_message,'text/html')
+            message.send()
+            
             return redirect(reverse('account:bio', kwargs={'username': username}))
 
         else:
@@ -35,7 +59,7 @@ def register_user(request):
     })
 
 def bio(request,username):
-    form=ProfileForm(request.POST or None)
+    form=ProfileForm(request.POST,request.FILES or None)
     profile=Profile.objects.get(user__username=username)
     if request.method == 'POST':
         if form.is_valid():
@@ -44,6 +68,7 @@ def bio(request,username):
             profile.bio=bio
             profile.profile_image=image
             profile.save()
+
             return redirect('website:index')
 
     return render(request,'account/bio.html',{
@@ -71,7 +96,7 @@ def login_user(request):
             user = authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
-                messages.success(request,(f'You just logged in dear {request.user.first_name}'))
+                #messages.success(request,(f'You just logged in dear {request.user.first_name}'))
                 if 'next' in request.POST:
                     return redirect(request.POST.get('next'))
                 return redirect('website:index')
@@ -105,42 +130,10 @@ def edit_profile(request):
         'profile_form': profile_form,
     })
 
-
-# follwing and unfollowing
+@login_required
 def members_profile(request):
     profiles=Profile.objects.all()
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            current_user_profile = request.user.profile
-            target_profile = Profile.objects.get(id=request.POST['target_profile'])
-            follow_unfollow(current_user_profile, target_profile)
-
     return render(request, 'account/members.html', {'profiles': profiles})
 
-
-
-
-
-# def edit_profile(request):
-#     profile = request.user.profile
-#     user = request.user
-
-#     if request.method == 'POST':
-#         form = EditProfileForm(request.POST, instance=profile)
-
-#         if form.is_valid():
-#             profile = form.save(commit=False)
-#             profile.user = user  # Re-associate the User object
-#             profile.save()
-
-#             user.username = form.cleaned_data['username']
-#             user.email = form.cleaned_data['email']
-#             ...
-#             user.save()
-#             ...
-#     else:
-#         form = EditProfileForm(instance=profile)
-
-#     return render(request, 'edit_profile.html', {'form': form})
 
 

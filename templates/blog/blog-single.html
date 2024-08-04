@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load blog_custom_tags %}
-{% load account_custom_tags %}
 {% block content %}
 		  
 			<!-- start banner Area -->
@@ -46,6 +45,7 @@
 										<p class="date col-lg-12 col-md-12 col-6"><a href="#">{{post.created|timesince}}</a> <span class="lnr lnr-calendar-full"></span></p>
 										<p class="view col-lg-12 col-md-12 col-6"><a href="#">{{post.counted_views}}</a> <span class="lnr lnr-eye"></span></p>
 										<p class="comments col-lg-12 col-md-12 col-6"><a href="#">{{post.comment_set.count}}</a> <span class="lnr lnr-bubble"></span></p>
+
 							
 										<ul class="social-links col-lg-12 col-md-12 col-6">
 											<li><a href="#"><i class="fa fa-telegram"></i></a></li>
@@ -184,7 +184,7 @@
 										{{form.content}}
 										<!-- <textarea class="form-control mb-10" rows="5" name="message" placeholder="Messege" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Messege'" required=""></textarea> -->
 									</div>
-									<button type="submit">Post Comment</button>
+									<button  type="submit">Post Comment</button>
 									<!-- <a href="#" class="primary-btn text-uppercase">Post Comment</a>	 -->
 								</form>
 							</div>
@@ -197,7 +197,11 @@
 			                            <button type="submit"><i class="fa fa-search"></i></button>
 			                        </form>
 								</div>
-								{% writer_widget post.post_author.username %}
+
+								
+								{% include 'account/writer-info.html' %}
+
+
 								{% popular_posts %}
 								{% post_category %}
 								{% include 'blog/ads.html' %}

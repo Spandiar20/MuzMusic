@@ -11,33 +11,7 @@ from .forms import PostCreateForm,CommentForm
 from django.utils.safestring import mark_safe
 from django.contrib import messages
 from utils import follow_unfollow
-# class BlogView(ListView):
-#     model=Post
-#     template_name='blog/blog-home.html'
-#     context_object_name='posts'
-#     paginate_by = 1 # Pagination over-write
-
-
-#     def get_queryset(self):
-#         query=self.request.GET.get('search')
-#         if query:
-#             return Post.objects.filter(
-#                 Q(title__icontains=query) |
-#                 Q(content__icontains=query) |
-#                 Q(post_author__username__icontains=query)
-#             )
-#         else:
-#             return Post.objects.all()
-        
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         query = self.request.GET.get('search')
-#         if query and not context['posts']:
-#             context['no_results_message'] = f"No results found for '{query}'."
-#         return context   
-
-
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
@@ -73,9 +47,7 @@ class BasePostListView(ListView):
   
 
 
-
-
-class BlogCategoryView(BasePostListView):
+class BlogCategoryView(LoginRequiredMixin,BasePostListView):
     template_name = 'blog/blog-home.html'
     
     def get_queryset(self):
@@ -85,7 +57,7 @@ class BlogCategoryView(BasePostListView):
         context=super().get_context_data(**kwargs)
         return context
 
-class BlogAuthorView(BasePostListView):
+class BlogAuthorView(LoginRequiredMixin,BasePostListView):
     template_name = 'blog/blog-author.html'
     
     def get_queryset(self):
@@ -94,7 +66,14 @@ class BlogAuthorView(BasePostListView):
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
     
-        context['username']=self.kwargs['author_name']
+        username=self.kwargs['author_name']
+        profile=get_object_or_404(Profile,user__username=username)
+        following=profile.follows.all().exclude(user__username=username)
+        followed=profile.followed_by.all().exclude(user__username=username)
+        context['username']=username
+        context['following']=following
+        context['followed']=followed
+        context['profile']=profile
         return context
 
 
@@ -105,7 +84,7 @@ class BlogHomeView(BasePostListView):
 
 
 
-class BlogSingleView(DetailView):
+class BlogSingleView(LoginRequiredMixin,DetailView):
     model=Post 
     template_name='blog/blog-single.html'
     context_object_name='post'   
@@ -116,10 +95,10 @@ class BlogSingleView(DetailView):
         post_tobe_liked=get_object_or_404(Post,id=self.kwargs['pk'])
         total_likes=post_tobe_liked.total_likes()
         post = self.get_object()
+        post_author=Profile.objects.get(user=post.post_author)
         comments = Comment.objects.filter(post=post).order_by('-created')
         
         form=CommentForm()
-
         liked=False
         if post_tobe_liked.likes.filter(id=self.request.user.id).exists():
             liked=True
@@ -127,6 +106,8 @@ class BlogSingleView(DetailView):
         context['total_likes']=total_likes    
         context['comments'] = comments  # Add the comments to the context
         context['form']=form
+        context['profile']=post_author
+        print(post_author)
         return context  
     
 
@@ -189,7 +170,6 @@ class PostCreateView(CreateView):
 
 
 
-@login_required
 def likeView(request,pk):
     post=get_object_or_404(Post,id=pk)
 
@@ -205,8 +185,23 @@ def likeView(request,pk):
 
 
 
-def follow_view(request,pk):
-    current_user_id=request.user.id
-    current_profile_id=pk
-    follow_unfollow(current_user_id,current_profile_id)
-    return HttpResponseRedirect(reverse('blog:author_view', ))
+# def follow_view(request,pk):
+#     current_user_id=request.user.id
+#     current_profile_id=pk
+#     follow_unfollow(current_user_id,current_profile_id)
+#     return HttpResponseRedirect(reverse('blog:author_view', ))
+def follow_unfollow(request):
+    if request.method == 'POST':
+        target_profile=Profile.objects.get(user__username=request.POST.get('target_profile'))
+        current_user_profile=Profile.objects.get(user__username=request.POST.get('user_id'))
+        print(current_user_profile,target_profile)
+        action = current_user_profile.follows.filter(id=target_profile.id).exists()
+
+        if action:
+            print('remove')
+            current_user_profile.follows.remove(target_profile.id)
+        else:
+            print('add')
+            current_user_profile.follows.add(target_profile.id)
+
+        return redirect(request.META.get('HTTP_REFERER', '/default_redirect_url/'))

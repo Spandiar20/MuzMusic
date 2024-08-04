@@ -4566,9 +4566,12 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #f8b600;
 }
 
+
 .main__user-suggestion__follow-btn {
   background: none;
   outline: none;
   border: none;
   font-size: 12px;
-}
+
+  
+  

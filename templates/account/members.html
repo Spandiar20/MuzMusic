@@ -35,10 +35,10 @@
 					<h3 class="text-heading">So what is this page about?</h3>
 					<p class="sample-text">
 						
-						here you can see our blog members profiles and get to know them even modr, you can check their own posts and find the ones with the same taste.
-						you could even get acces to thier social media profile if they provide links.
+						Here you can see our blog members profiles and get to know them even more, you can check their own posts and find the ones with the same taste.
+						You could even get acces to thier social media profile if they provide links.
 						<p>
-							<strong>you know what, birds of a feather fly together</strong> 
+							<strong>You know what, Birds of a Feather Fly Together</strong> 
 						</p>
 						</p>
 					
@@ -52,33 +52,41 @@
 
 					{% for profile in profiles %}
 						<div class="section-top-border">
-							<h3 class="mb-30"><a href="{% url 'blog:blog_author' profile.user.username %}">{{profile.user.username}}</a></h3>
+							<h3 class="mb-30"><a style="color: black;" href="{% url 'blog:blog_author' profile.user.username %}">{{profile.user.username}}</a></h3>
 							<div class="row">
 								<div class="col-md-3">
-									<a href="">
-											<img src="{{profile.profile_image.url}}" alt="" class="img-fluid">
+									<a href="{% url 'blog:blog_author' profile.user.username %}">
+											<img  src="{{profile.profile_image.url}}" alt="" class="img-fluid">
 								
 									</a>
 								</div>
 								<div class="col-md-9 mt-sm-20 left-align-p">
 									<p>{{profile.bio}}</p>
 								</div>
+							
+						
+
 								{% if not request.user.id == profile.id %}
 								<div class="button-group-area mt-10">
-									<form method="POST" action="{% url 'account:members' %}">
+									<form method="POST" action="{% url 'blog:follow' %}">
 										{% csrf_token %}
-										<input type="hidden" name="target_profile" value="{{profile.id}}">
+										<input type="hidden" name="target_profile" value="{{profile.user}}">
+										<input type="hidden" name="user_id" value="{{request.user}}">
+
 										{% if profile in user.profile.follows.all %}
 											<button type="submit" class="genric-btn success-border medium main__user-suggestion__follow-btn">Following</button>
 
 										{% else %}	
 											<button  type="submit" class="genric-btn success-border medium main__user-suggestion__follow-btn">Follow</button>
+											<button type="submit" class="genric-btn  primary samll">Following</button>
+
+										{% else %}	
+											<button  type="submit" class="genric-btn  primary samll">Follow</button>
 
 
 										{% endif %}
 										
 									</form>
-								</div>
 								{% endif %}
 							</div>
 
